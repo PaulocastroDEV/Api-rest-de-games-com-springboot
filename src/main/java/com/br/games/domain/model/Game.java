@@ -12,7 +12,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @Entity
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Games {
+public class Game {
 	@EqualsAndHashCode.Include
 	@javax.persistence.Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
