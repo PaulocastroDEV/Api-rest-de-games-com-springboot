@@ -8,10 +8,15 @@ Nesse projeto foi desenvolvido uma api, no qual podemos cadastrar um game, edita
 
 ### BaseUrl: /games
 -Post: Create();
+
 -Get: findAll();
+
 -get/{id}: findById;
+
 -Put/{id}: update();
+
 -Path/{id}: updatepart();
+
 -Delete/{id}: delete();
 
 ### Model
