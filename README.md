@@ -6,7 +6,7 @@ Nesse projeto foi desenvolvido uma api, no qual podemos cadastrar um game, edita
 
 ## Endpoints
 
--BaseUrl: /games
+### BaseUrl: /games
 -Post: Create();
 -Get: findAll();
 -get/{id}: findById;
