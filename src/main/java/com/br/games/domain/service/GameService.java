@@ -29,7 +29,7 @@ public class GameService {
 	public Game findById(@PathVariable Long gameid){
 		Optional<Game> game= gameRepository.findById(gameid);
 		
-		return gameRepository.findById(gameid).orElseThrow(() -> new ResourceNotFoundException("Game não encontra Id: %d" + gameid));
+		return gameRepository.findById(gameid).orElseThrow(() -> new ResourceNotFoundException("Não existe um game com Id: " + gameid +" digite um id válido"));
 	}
 
 	public Game save(Game game) {

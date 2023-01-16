@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -43,13 +45,13 @@ public class GameController {
 		return ResponseEntity.ok().body(obj);
 	}
 	@PostMapping
-	public ResponseEntity<Game> create(@RequestBody Game obj){
+	public ResponseEntity<Game> create(@RequestBody @Valid Game obj){
 		var game = gameService.save(obj);
 		return ResponseEntity.status(HttpStatus.CREATED).body(game);
 		
 	}
 	@PutMapping("/{gameId}")
-	public ResponseEntity<Game> Update(@PathVariable Long gameId,@RequestBody Game obj){
+	public ResponseEntity<Game> Update(@PathVariable Long gameId,@RequestBody @Valid Game obj){
 			var game= gameService.update(gameId, obj);
 			return ResponseEntity.status(HttpStatus.OK).body(game);
 		
