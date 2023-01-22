@@ -1,5 +1,7 @@
 package com.br.games;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,8 +23,9 @@ class GamesMsApplicationTests {
 	
 	@LocalServerPort
 	private int port;
-	
+	private static final String DADOS_INVALIDOS_PROBLEM_TITLE="dados-invalidos";
 	private String jsonGameCorreto;
+	private String jsonGameSemNome;
 	
 	@Autowired
 	private GameRepository gameRepository;
@@ -32,6 +35,7 @@ class GamesMsApplicationTests {
 		RestAssured.port=port;
 		RestAssured.basePath="/games";
 		jsonGameCorreto = ResourceUtils.getContentFromResource("/json/correto.json");
+		jsonGameSemNome = ResourceUtils.getContentFromResource("/json/semnome.json");
 	}
 	@Test
 	public void MustReturnStatus200_WhenSearchGames() {
@@ -44,7 +48,7 @@ class GamesMsApplicationTests {
 			.statusCode(HttpStatus.OK.value());
 	}
 	@Test
-	public void MustReturnStatus201_WhenAddGame() {
+	public void MustReturnStatus201_WhenRegistrationGame() {
 		RestAssured
 			.given()
 				.body(jsonGameCorreto)
@@ -55,5 +59,17 @@ class GamesMsApplicationTests {
 			.then()
 				.statusCode(HttpStatus.CREATED.value());
 	}
-	
+	@Test
+	public void MustReturnStatus400_WhenRegistrationGameWithoutName() {
+		RestAssured
+			.given()
+				.body(jsonGameSemNome)
+				.contentType(ContentType.JSON)
+				.accept(ContentType.JSON)
+			.when()
+				.post()
+			.then()
+				.statusCode(HttpStatus.BAD_REQUEST.value())
+				.body("title",equalTo(DADOS_INVALIDOS_PROBLEM_TITLE));
+	}
 }
