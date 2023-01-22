@@ -27,6 +27,7 @@ class GamesMsApplicationTests {
 	private String jsonGameCorreto;
 	private String jsonGameSemNome;
 	private String jsonGameSemGenero;
+	private String jsonGameSemLancamento;
 	
 	@Autowired
 	private GameRepository gameRepository;
@@ -38,6 +39,7 @@ class GamesMsApplicationTests {
 		jsonGameCorreto = ResourceUtils.getContentFromResource("/json/correto.json");
 		jsonGameSemNome = ResourceUtils.getContentFromResource("/json/semnome.json");
 		jsonGameSemGenero= ResourceUtils.getContentFromResource("/json/semgenero.json");
+		jsonGameSemLancamento= ResourceUtils.getContentFromResource("/json/semlancamento.json");
 	}
 	@Test
 	public void MustReturnStatus200_WhenSearchGames() {
@@ -79,6 +81,19 @@ class GamesMsApplicationTests {
 		RestAssured
 			.given()
 				.body(jsonGameSemGenero)
+				.contentType(ContentType.JSON)
+				.accept(ContentType.JSON)
+			.when()
+				.post()
+			.then()
+				.statusCode(HttpStatus.BAD_REQUEST.value())
+				.body("title",equalTo(DADOS_INVALIDOS_PROBLEM_TITLE));
+	}
+	@Test
+	public void MustReturnStatus400_WhenRegistrationGameWithoutLaunch() {
+		RestAssured
+			.given()
+				.body(jsonGameSemLancamento)
 				.contentType(ContentType.JSON)
 				.accept(ContentType.JSON)
 			.when()
