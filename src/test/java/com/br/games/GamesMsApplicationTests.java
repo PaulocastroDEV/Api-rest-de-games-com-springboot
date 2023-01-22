@@ -1,6 +1,5 @@
 package com.br.games;
 
-import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,13 +13,16 @@ import com.br.games.domain.repository.GameRepository;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import util.ResourceUtils;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+
 class GamesMsApplicationTests {
 	
 	@LocalServerPort
 	private int port;
 	
+	private String jsonGameCorreto;
 	
 	@Autowired
 	private GameRepository gameRepository;
@@ -29,9 +31,10 @@ class GamesMsApplicationTests {
 		RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
 		RestAssured.port=port;
 		RestAssured.basePath="/games";
+		jsonGameCorreto = ResourceUtils.getContentFromResource("/json/correto.json");
 	}
 	@Test
-	public void MustReturnStatus200() {
+	public void MustReturnStatus200_WhenSearchGames() {
 		RestAssured
 		.given()
 			.accept(ContentType.JSON)
@@ -40,5 +43,17 @@ class GamesMsApplicationTests {
 		.then()
 			.statusCode(HttpStatus.OK.value());
 	}
-
+	@Test
+	public void MustReturnStatus201_WhenAddGame() {
+		RestAssured
+			.given()
+				.body(jsonGameCorreto)
+				.contentType(ContentType.JSON)
+				.accept(ContentType.JSON)
+			.when()
+				.post()
+			.then()
+				.statusCode(HttpStatus.CREATED.value());
+	}
+	
 }
