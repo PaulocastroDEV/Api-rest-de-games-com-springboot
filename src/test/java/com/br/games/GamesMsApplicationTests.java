@@ -23,6 +23,8 @@ class GamesMsApplicationTests {
 	
 	@LocalServerPort
 	private int port;
+	private static final int idGameExistente =1;
+	private static final int idGameInesistente =100;
 	private static final String DADOS_INVALIDOS_PROBLEM_TITLE="dados-invalidos";
 	private String jsonGameCorreto;
 	private String jsonGameSemNome;
@@ -101,5 +103,27 @@ class GamesMsApplicationTests {
 			.then()
 				.statusCode(HttpStatus.BAD_REQUEST.value())
 				.body("title",equalTo(DADOS_INVALIDOS_PROBLEM_TITLE));
+	}
+	@Test
+	public void MustResturnSatus204_whenDeleteOneGame() {
+			RestAssured
+				.given()
+					.pathParam("gameId",idGameExistente)
+					.accept(ContentType.JSON)
+				.when()
+					.delete("/{gameId}")
+				.then()
+					.statusCode(HttpStatus.NO_CONTENT.value());
+	}
+	@Test
+	public void MustResturnSatus404_whenDeleteOneGameNonExistent() {
+			RestAssured
+				.given()
+					.pathParam("gameId",idGameInesistente)
+					.accept(ContentType.JSON)
+				.when()
+					.delete("/{gameId}")
+				.then()
+					.statusCode(HttpStatus.NOT_FOUND.value());
 	}
 }
