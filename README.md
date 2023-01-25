@@ -15,8 +15,6 @@ Nesse projeto foi desenvolvido uma api, no qual podemos cadastrar um game, edita
 
 -Put/{id}: update();
 
--Path/{id}: updatepart();
-
 -Delete/{id}: delete();
 
 ### Model
