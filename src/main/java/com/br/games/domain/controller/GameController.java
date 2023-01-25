@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.aspectj.weaver.ast.Var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.br.games.domain.DTO.GameDTO;
 import com.br.games.domain.DTO.GameDTOAssembler;
+import com.br.games.domain.DTO.GameDTODisassembler;
+import com.br.games.domain.DTO.GameInputDTO;
 import com.br.games.domain.model.Game;
 import com.br.games.domain.service.GameService;
 
@@ -29,6 +32,9 @@ public class GameController {
 	
 	@Autowired
 	private GameDTOAssembler gameDTOAssembler;
+	
+	@Autowired
+	private GameDTODisassembler gameDTODisassembler;
 	
 	@GetMapping
 	public List<GameDTO> findAll(){
@@ -42,14 +48,16 @@ public class GameController {
 		return gameDTOAssembler.toModel(game);
 	}
 	@PostMapping
-	public ResponseEntity<Game> create(@RequestBody @Valid Game obj){
-		var game = gameService.save(obj);
+	public ResponseEntity<Game> create(@RequestBody @Valid GameInputDTO gameInputDTO){
+		Game game = gameDTODisassembler.toObjectDomain(gameInputDTO);
+		gameService.save(game);
 		return ResponseEntity.status(HttpStatus.CREATED).body(game);
 		
 	}
 	@PutMapping("/{gameId}")
-	public ResponseEntity<Game> Update(@PathVariable Long gameId,@RequestBody @Valid Game obj){
-			var game= gameService.update(gameId, obj);
+	public ResponseEntity<Game> Update(@PathVariable Long gameId,@RequestBody @Valid GameInputDTO gameInputDTO){
+			Game game= gameDTODisassembler.toObjectDomain(gameInputDTO);
+			gameService.update(gameId, game);
 			return ResponseEntity.status(HttpStatus.OK).body(game);
 		
 	}
